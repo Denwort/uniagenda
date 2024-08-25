@@ -1,0 +1,52 @@
+{% extends "schedule/layout.html" %}
+
+{% block body %}
+<div class="container my-4">
+    <h2>Add New Task</h2>
+        <form method="post" action="{% url 'task/add' default_type %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select name="type" id="type" class="form-control" required>
+                    <option value="Reminder" {% if default_type == "reminder" %}selected{% endif %}>Reminder</option>
+                    <option value="Assignment" {% if default_type == "assignment" %}selected{% endif %}>Assignment</option>
+                    <option value="Exam" {% if default_type == "exam" %}selected{% endif %}>Exam</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="routine">Routine related</label>
+                <select name="routine" id="routine" class="form-control" required>
+                    <option value="0">None</option>
+                    {% for routine in routines %}
+                    <option value="{{ routine.id }}">{{ routine.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            <div class="form-group w-50">
+                <label for="description">Description</label>
+                <textarea type="text" name="description" id="description" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">Due Date</label>
+                <input type="datetime-local" name="due_date" id="due_date" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Task</button>
+            
+        </form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+
+<style>
+    
+</style>

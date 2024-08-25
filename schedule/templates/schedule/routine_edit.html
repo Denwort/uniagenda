@@ -1,0 +1,127 @@
+{% extends "schedule/layout.html" %}
+
+{% block body %}
+<div class="container my-4">
+    <h2>Edit Routine</h2>
+    <form method="post" action="{% url 'routine/edit' routine.id %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select name="type" id="type" class="form-control" required>
+                <option value="Course" {% if routine.type == "Course" %}selected{% endif %}>Course</option>
+                <option value="Activity" {% if routine.type == "Activity" %}selected{% endif %}>Activity</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" class="form-control" value="{{ routine.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="color" name="color" id="color" class="form-control color-picker" value="{{ routine.color }}" required>
+        </div>
+
+        <h4>Day Details</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Day of the Week</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="routine-days-container">
+                {% for day in routine.days.all %}
+                <tr>
+                    <td>
+                        <input type="text" name="description_{{ forloop.counter }}" class="form-control" value="{{ day.description }}">
+                    </td>
+                    <td>
+                        <select name="day_of_week_{{ forloop.counter }}" class="form-control" required>
+                            <option value="Monday" {% if day.day_of_week == "Monday" %}selected{% endif %}>Monday</option>
+                            <option value="Tuesday" {% if day.day_of_week == "Tuesday" %}selected{% endif %}>Tuesday</option>
+                            <option value="Wednesday" {% if day.day_of_week == "Wednesday" %}selected{% endif %}>Wednesday</option>
+                            <option value="Thursday" {% if day.day_of_week == "Thursday" %}selected{% endif %}>Thursday</option>
+                            <option value="Friday" {% if day.day_of_week == "Friday" %}selected{% endif %}>Friday</option>
+                            <option value="Saturday" {% if day.day_of_week == "Saturday" %}selected{% endif %}>Saturday</option>
+                            <option value="Sunday" {% if day.day_of_week == "Sunday" %}selected{% endif %}>Sunday</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="time" name="start_time_{{ forloop.counter }}" class="form-control" value="{{ day.start_time|date:'H:i' }}" required>
+                    </td>
+                    <td>
+                        <input type="time" name="end_time_{{ forloop.counter }}" class="form-control" value="{{ day.end_time|date:'H:i' }}" required>
+                    </td>
+                    <td style=" width: 1px;">
+                        <button type="button" class="btn btn-danger" onclick="removeRoutineDay(this)">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <input type="hidden" name="total_days" id="total_days" value="{{ routine.days.count }}">
+            <button type="button" class="btn btn-info" onclick="addRoutineDay()">Add Day</button>
+        </div>
+
+        <div class="form-group">
+            <a href="{% url 'routine' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    let dayCount = {{ routine.days.count }};
+
+    function addRoutineDay() {
+        dayCount++;
+        const container = document.getElementById('routine-days-container');
+        const newRoutineDay = document.createElement('tr');
+        newRoutineDay.classList.add('routine-day');
+        newRoutineDay.innerHTML = `
+            <td>
+                <input type="text" name="description_${dayCount}" class="form-control">
+            </td>
+            <td>
+                <select name="day_of_week_${dayCount}" class="form-control" required>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </td>
+            <td>
+                <input type="time" name="start_time_${dayCount}" class="form-control" required>
+            </td>
+            <td>
+                <input type="time" name="end_time_${dayCount}" class="form-control" required>
+            </td>
+            <td style=" width: 1px;">
+                <button type="button" class="btn btn-danger" onclick="removeRoutineDay(this)">Delete</button>
+            </td>
+        `;
+        container.appendChild(newRoutineDay);
+        document.getElementById('total_days').value = dayCount;
+    }
+    function removeRoutineDay(button) {
+        const row = button.parentElement.parentElement;
+        row.remove();
+        dayCount--;
+        document.getElementById('total_days').value = dayCount;
+    }
+</script>
+{% endblock %}

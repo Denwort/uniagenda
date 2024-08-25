@@ -1,0 +1,373 @@
+html{
+    height: 100%;
+    box-sizing: border-box;
+}
+body {
+    background-color: #f8f9fa;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.navbar {
+    border-bottom: 2px solid #e3e3e3;
+    padding: 1rem;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.footer {
+    margin-top: auto;
+    background-color: #343a40;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Opcional: Ajusta el margen del menú desplegable si es necesario */
+.nav-item.dropdown .dropdown-menu {
+    margin-top: 0;
+}
+
+.dropdown-menu {
+    max-width: 250px; /* Ajusta el ancho máximo según sea necesario */
+    overflow-x: hidden; /* Evita el desbordamiento horizontal */
+}
+
+.navbar-nav {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+/* Para el today */
+/* Container styling */
+
+
+.calendar-container {
+    width: 70%;
+    display: grid;
+    grid-template-columns: 50px 1fr; /* Ajusta el ancho de la columna de tiempo */
+    gap: 0px;
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+/* Time slot styling */
+.time-slot {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 60px;
+    margin-left: 5px;
+}
+
+.time-slot-last {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 0px;
+    margin-left: 5px;
+}
+
+.hour-line {
+    position: absolute;
+    width: 30%;
+    left: 60%;
+    top: 0px;
+    height: 1px;
+    background-color: #000;
+}
+
+.hour-label {
+    position: absolute;
+    left: 0;
+    top: -9px;
+    font-size: 12px;
+    color: #333;
+}
+
+/* Event slot styling */
+.event-slot {
+    position: relative; /* Necesario para que el task se posicione dentro de event-slot */
+    padding: 0px; /* Agrega padding-right para dar espacio al task */
+    border: 1px solid #dee2e6;
+    background-color: #ffffff;
+    border-radius: 0px;
+    display: block;
+    align-items: center;
+    height: 60px;
+    min-width: 60px;
+}
+/* Event styling */
+.event {
+    opacity: 90%;
+    background-color: #007bff;
+    border-radius: 5px;
+    padding: 10px;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    cursor: default;
+    z-index: 11;
+    transition: transform 0.2s ease-in-out, z-index 0.2s ease-in-out;
+}
+
+.event:hover {
+    opacity: 100%;
+    transform: scale(1.05);
+    z-index: 21;
+}
+
+.event-time {
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.event-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Task styling */
+.task {
+    opacity: 80%;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0; /* Align to the right edge of the container */
+    top: 0; /* Keep the top property as is */
+    transform: translateY(-50%); /* Center vertically */
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 3px 8px;
+    color: #fff;
+    font-weight: 400;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: default;
+    z-index: 12; /* Ensure the task is above other elements */
+    transform-origin: top right; /* Anchor the scaling to the top-right corner */
+    transition: transform 0.2s ease-in-out, z-index 0.2s ease-in-out; /* Smooth animation */
+}
+
+.task:hover {
+    opacity: 100%;
+    transform: scale(1.05) translateY(-50%); /* Only scale, no translation */
+    z-index: 22;
+}
+
+
+.task-checkbox {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background-color: transparent;
+}
+
+.task-checkbox:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.task-checkbox2 {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background-color: transparent;
+}
+
+.task-checkbox2:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Week */
+
+.week-calendar-container {
+    display: grid;
+    grid-template-columns: 50px  repeat(7, 1fr);
+    gap: 0px;
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.day-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-y: hidden;
+}
+
+/* Routine */
+.routine-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.routine-section {
+    width: 30%;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.routine-list {
+    margin-bottom: 0px;
+}
+
+.routine-item {
+    margin-bottom: 15px;
+}
+
+.routine-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.routine-time {
+    font-size: 14px;
+    color: #555;
+}
+
+.add-routine-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+.add-routine-btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+    text-decoration: none;
+}
+
+.color-circle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+
+.boton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+}
+
+.boton-edit {
+    color: #007bff;
+}
+
+.boton-edit:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.boton-delete {
+    color: #dc3545;
+}
+
+.boton-delete:hover {
+    color: #c82333;
+    text-decoration: none;
+}
+
+.today {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.day {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.current-time-line {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    z-index: 1;
+}
+
+.past-background {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(128, 128, 128, 0.1);; /* Fondo gris opaco */
+    z-index: 2; /* Debajo de la línea actual y eventos */
+}
+
+.past-event, .past-task {
+    filter: grayscale(30%);
+}
+
+.form-group{
+    width: fit-content;
+}

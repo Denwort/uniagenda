@@ -1,0 +1,286 @@
+{% extends "schedule/layout.html" %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="mb-4">My Tasks</h2>
+    
+    <div class="routine-container">
+        <!-- Reminders Section -->
+        <div class="routine-section">
+            <h3 class="section-title">Reminders</h3>
+            <div class="routine-list">
+
+                <!-- Not Completed Reminders -->
+                <div id="reminder-tasks-not-completed">
+                    {% for task in incomplete_reminders %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="reminder" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}" {% if task.due_date|date:'Y-m-d H:i' < now|date:'Y-m-d H:i' %}style="color:red"{% endif %}>
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    <p id="reminder-tasks-not-completed-empty" >No pending reminders.</p>
+                </div>
+
+                <a class="btn btn-primary btn-block mt-4 mb-3" href="{% url 'task/add' 'reminder' %}">Add New Reminder</a>
+                <button class="btn btn-secondary btn-block" id="reminder-toggle" onclick="toggleVisibility('reminder')">Show Completed Reminders</button>
+
+                <!-- Completed Reminders -->
+                <div id="reminder-tasks-completed" class="mt-4">
+                    <h5 id="reminder-tasks-completed-title">Completed</h5>
+                    {% for task in completed_reminders %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="reminder" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}">
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Assignments Section -->
+        <div class="routine-section">
+            <h3 class="section-title">Assignments</h3>
+
+            <!-- Not Completed Assignments -->
+            <div class="routine-list">
+                <div id="assignment-tasks-not-completed">
+                    {% for task in incomplete_assignments %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="assignment" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}" {% if task.due_date|date:'Y-m-d H:i' < now|date:'Y-m-d H:i' %}style="color:red"{% endif %}>
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    <p id="assignment-tasks-not-completed-empty">No pending assignments.</p>
+                </div>
+            
+                <a class="btn btn-primary btn-block mt-4 mb-3" href="{% url 'task/add' 'assignment' %}">Add New Assignments</a>
+                <button class="btn btn-secondary btn-block" id="assignment-toggle" onclick="toggleVisibility('assignment')">Show Completed Assignments</button>
+
+                <!-- Completed Assignments -->
+                <div id="assignment-tasks-completed" class="mt-4">
+                    <h5 id="assignment-tasks-completed-title">Completed</h5>
+                    {% for task in completed_assignments %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="assignment" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}">
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+            
+        </div>
+
+        <!-- Exams Section -->
+        <div class="routine-section">
+            <h3 class="section-title">Exams</h3>
+
+            <!-- Not Completed Exams -->
+            <div class="routine-list">
+                <div id="exam-tasks-not-completed">
+                    {% for task in incomplete_exams %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="exam" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}" {% if task.due_date|date:'Y-m-d H:i' < now|date:'Y-m-d H:i' %}style="color:red"{% endif %}>
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    <p id="exam-tasks-not-completed-empty">No pending exams.</p>
+                </div>
+
+                <a class="btn btn-primary btn-block mt-4 mb-3" href="{% url 'task/add' 'exam' %}">Add New Exams</a>
+                <button class="btn btn-secondary btn-block" id="exam-toggle" onclick="toggleVisibility('exam')">Show Completed Exams</button>
+
+                <!-- Completed Exams -->
+                <div id="exam-tasks-completed" class="mt-4">
+                    <h5 id="exam-tasks-completed-title">Completed</h5>
+                    {% for task in completed_exams %}
+                        <div class="routine-item" id="task-{{ task.id }}" data-type="exam" data-due_date="{{ task.due_date|date:"Y-m-d\\TH:i:s" }}">
+                            <div class="routine-title">
+                                <input type="checkbox" class="task-checkbox2" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                <div class="ml-1">{{ task.title }}</div>
+                            </div>
+                            <div class="routine-time"><strong>{{ task.routine.title }}</strong></div>
+                            <div class="routine-time">{{ task.description }}</div>
+                            <div class="routine-time">{{ task.due_date }}</div>
+                            <a class="boton boton-edit" href="{% url 'task/edit' task.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="boton boton-delete" href="{% url 'task/delete' task.id %}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+        </div>
+            
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    function toggleTaskCompletion(taskId) {
+        const checkbox = document.getElementById(`task-checkbox-${taskId}`);
+        const taskElement = document.getElementById(`task-${taskId}`);
+        const complete = checkbox.checked ? 'true' : 'false';
+
+        fetch(`task/complete/${taskId}/${complete}`, {
+            method: 'POST',
+            body: JSON.stringify({ "completed": checkbox.checked })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const type = taskElement.getAttribute('data-type');
+            if (data.completed) {
+                moveTask(taskElement, `${type}-tasks-not-completed`, `${type}-tasks-completed`);
+            } else {
+                moveTask(taskElement, `${type}-tasks-completed`, `${type}-tasks-not-completed`);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function moveTask(taskElement, fromId, toId) {
+        const fromContainer = document.getElementById(fromId);
+        const toContainer = document.getElementById(toId);
+
+        fromContainer.removeChild(taskElement);
+        toContainer.appendChild(taskElement);
+
+        sortTasks(toContainer);
+        sortTasks(fromContainer);
+
+        toggleSectionVisibility(fromContainer, fromId);
+        toggleSectionVisibility(toContainer, toId);
+    }
+
+    function sortTasks(container) {
+        const tasks = Array.from(container.getElementsByClassName('routine-item'));
+        tasks.sort((a, b) => {
+            const dateA = new Date(a.getAttribute('data-due_date'));
+            const dateB = new Date(b.getAttribute('data-due_date'));
+            return dateA - dateB;
+        });
+        tasks.forEach(task => {
+            const dueDate = new Date(task.getAttribute('data-due_date'));
+            const now = new Date();
+            
+            const checkbox = task.querySelector('.task-checkbox2');
+            if (checkbox.checked){
+                task.style.color = 'black';
+            }
+            else if (now > dueDate) {
+                task.style.color = 'red';
+            }
+            else{
+                task.style.color = 'black';
+            }
+    
+            container.appendChild(task);
+        });
+    }    
+
+    function toggleSectionVisibility(container, sectionId) {
+        const titleElement = document.getElementById(`${sectionId}-title`);
+        const emptyMessage = document.getElementById(`${sectionId}-empty`);
+    
+        if (container.children.length === 1) {
+            if (titleElement) titleElement.style.display = 'none';
+            if (emptyMessage) emptyMessage.style.display = 'block';
+        } else {
+            if (titleElement) titleElement.style.display = 'block';
+            if (emptyMessage) emptyMessage.style.display = 'none';
+        }
+    }
+
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function toggleVisibility(type) {
+        const completedContainer = document.getElementById(`${type}-tasks-completed`);
+        const button = document.getElementById(`${type}-toggle`);
+
+        if (completedContainer.style.display === 'none') {
+            completedContainer.style.display = 'block';
+            button.textContent = `Hide Completed ${capitalize(type)}s`;
+        } else {
+            completedContainer.style.display = 'none';
+            button.textContent = `Show Completed ${capitalize(type)}s`;
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleSectionVisibility(document.getElementById('reminder-tasks-completed'), 'reminder-tasks-completed');
+        toggleSectionVisibility(document.getElementById('reminder-tasks-not-completed'), 'reminder-tasks-not-completed');
+        toggleSectionVisibility(document.getElementById('assignment-tasks-completed'), 'assignment-tasks-completed');
+        toggleSectionVisibility(document.getElementById('assignment-tasks-not-completed'), 'assignment-tasks-not-completed');
+        toggleSectionVisibility(document.getElementById('exam-tasks-completed'), 'exam-tasks-completed');
+        toggleSectionVisibility(document.getElementById('exam-tasks-not-completed'), 'exam-tasks-not-completed');
+        toggleVisibility('reminder');
+        toggleVisibility('assignment');
+        toggleVisibility('exam');
+    });
+    
+</script>
+{% endblock %}

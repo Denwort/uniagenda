@@ -1,0 +1,88 @@
+{% extends "schedule/layout.html" %}
+
+{% load custom_filters %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="mb-4">This Week's Schedule</h2>
+    <div class="week-calendar-container">
+
+        <div class="time-hours">
+            <div>&nbsp;</div>
+            <div>&nbsp;</div>
+            {% for hour in hours %}
+                <div class="time-slot">
+                    <div class="hour-line"></div>
+                    <span class="hour-label">{{ hour }}:00</span>
+                </div>
+            {% endfor %}
+            <div class="time-slot-last">
+                <div class="hour-line"></div>
+                <span class="hour-label">24:00</span>
+            </div>
+        </div>
+
+        {% for day in days %}
+            <div class="day-slot">
+                <div class="day-header">
+                    <div class="day-label">{{ day.date|date:"l" }}</div>
+                    <div class="day-label">{{ day.date|date:"d M" }}</div>
+                </div>
+                <div class="day">
+
+                    {% if day.date < current_date %}
+                        <div class="past-background" style="height: 1440px;"></div>
+                    {% elif day.date == current_date %}
+                        <div class="past-background" style="height: {{ current_time_position }}px;"></div>
+                        <div class="current-time-line" style="top: {{ current_time_position }}px;"></div>
+                    {% endif %}
+
+                    {% for hour in hours %}
+                        <div class="event-slot">
+                            {% for event in day.routines %}
+                                {% if hour == event.start_time.hour %}
+                                    {% with event_height=event.start_time|get_height:event.end_time %}
+                                    <div class="event {% if day.date < current_date and event.end_time < current_time %}past-event{% endif %}" style="background-color: {{ event.color }}; height: {{ event_height }}px; margin-top: {{ event.start_time.minute }}px;">
+                                        <div class="event-title">{{ event.title }}</div>
+                                        <div class="event-time">
+                                            <span class="start-time">{{ event.description }}</span>
+                                        </div>
+                                        
+                                    </div>
+                                    {% endwith %}
+                                {% endif %}
+                            {% endfor %}
+                            {% for task in day.tasks %}
+                                {% if hour == task.due_date.hour %}
+                                    <div class="task {% if day.date < current_date and task.due_date < current_time %}past-task{% endif %}" style="{% if task.routine %}background-color: {{ task.routine.color }}{% endif %}; margin-top: {{ task.due_date.minute }}px;">
+                                        <input type="checkbox" class="task-checkbox" id="task-checkbox-{{ task.id }}" name="{{ task.id }}" {% if task.completed %}checked{% endif %} onclick="toggleTaskCompletion({{ task.id }})">
+                                        <div class="ml-2" style="min-width: max-content;">{{ task.title }}</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function toggleTaskCompletion(taskId) {
+        const checkbox = document.getElementById(`task-checkbox-${taskId}`);
+        const complete = checkbox.checked ? 'true' : 'false';
+        fetch(`task/complete/${taskId}/${complete}`, {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+            checkbox.checked = data.completed;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

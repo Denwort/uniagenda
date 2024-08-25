@@ -1,0 +1,67 @@
+{% extends "schedule/layout.html" %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="mb-4">My Routines</h2>
+    
+    <div class="routine-container">
+        <!-- Courses Section -->
+        <div class="routine-section">
+            <h3 class="section-title">Courses</h3>
+            <div class="routine-list">
+                {% for routine in course_routines %}
+                    <div class="routine-item">
+                        <div class="routine-title">
+                            <span class="color-circle" style="background-color: {{ routine.color }};"></span>
+                            {{ routine.title }}
+                        </div>
+                        {% for day in routine.days.all %}
+                            <div class="routine-time">
+                                <strong>{{ day.description }}</strong>
+                                {{ day.day_of_week}} {{ day.start_time|date:"H:i"}} - {{ day.end_time|date:"H:i" }}
+                            </div>
+                        {% endfor %}
+                        <a class="boton boton-edit" href="{% url 'routine/edit' routine.id %}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a class="boton boton-delete" href="{% url 'routine/delete' routine.id %}">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="btn btn-primary btn-block" href="{% url 'routine/add' 'course' %}">Add New Course</a>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="routine-section">
+            <h3 class="section-title">Activities</h3>
+            <div class="routine-list">
+                {% for routine in activity_routines %}
+                    <div class="routine-item">
+                        <div class="routine-title">
+                            <span class="color-circle" style="background-color: {{ routine.color }};"></span>
+                            {{ routine.title }}
+                        </div>
+                        {% for day in routine.days.all %}
+                            <div class="routine-time">
+                                <strong>{{ day.description }}</strong>
+                                {{ day.day_of_week}} {{ day.start_time|date:"H:i"}} - {{ day.end_time|date:"H:i" }}
+                            </div>
+                        {% endfor %}
+                        <a class="boton boton-edit" href="{% url 'routine/edit' routine.id %}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a class="boton boton-delete" href="{% url 'routine/delete' routine.id %}">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="btn btn-primary btn-block" href="{% url 'routine/add' 'activity' %}">Add New Activity</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
