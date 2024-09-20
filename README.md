@@ -11,12 +11,6 @@ Uniagenda is a web application designed to help university students manage their
 - **Routine**: Manage courses and recurring activities with the ability to add, delete, or modify them on a weekly basis.
 - **Tasks**: Create and organize assignments, exams, and reminders by assigning due dates and associating them with specific courses or activities.
 
-## Distinctiveness and Complexity
-
-Uniagenda is distinct from other projects because it specifically targets the needs of university students, integrating multiple functionalities into one application. Unlike traditional e-commerce or social network projects, this platform combines academic and personal life management, offering a unique set of features tailored for students. This focus on academic-related tasks and activities makes Uniagenda stand out from other generic task management tools.
-
-Uniagenda’s complexity arises from its integration of several interconnected features, including course management, task scheduling, and activity tracking. The application employs Django’s robust backend to manage the data relationships between users, events and tasks. Additionally, the front-end uses JavaScript to provide a dynamic and interactive user experience, all while ensuring the application is mobile-responsive. These elements combine to create a sophisticated and user-friendly platform that handles the student needs.
-
 ## File Structure
 
 - `manage.py`: Django management script.
